@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest" Name="TemplateHub" ProductID="{f5040d93-a65b-498b-85f0-1ba525c18130}" Version="1.0.9.40" SharePointMinVersion="16.0.0.0">
+  <Properties>
+    <Title>Test Title</Title>
+    <StartPage>~appWebUrl/home/home.html?{StandardTokens}&amp;SPHostTitle={HostTitle}</StartPage>
+    <SupportedLocales>
+      <SupportedLocale CultureName="en-US"/>
+      <SupportedLocale CultureName="nb-NO"/>
+    </SupportedLocales>
+  </Properties>
+  <AppPrincipal>
+    <Internal/>
+  </AppPrincipal>
+  <AppPermissionRequests AllowAppOnlyPolicy="false">
+    <AppPermissionRequest Right="FullControl" Scope="http://sharepoint/content/tenant"/>
+    <AppPermissionRequest Scope="http://sharepoint/search" Right="QueryAsUserIgnoreAppPrincipal"/>
+  </AppPermissionRequests>
+  <RemoteEndpoints>
+    <RemoteEndpoint Url="https://verificationservice.officeapps.live.com/ova/verificationagent.svc"/>
+  </RemoteEndpoints>
+</App>

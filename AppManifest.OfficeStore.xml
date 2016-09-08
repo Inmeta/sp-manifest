@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- AppCatalog Version Permissions -->
+<App>
+  <AppPermissionRequests AllowAppOnlyPolicy="false">
+    <AppPermissionRequest Right="Manage" Scope="http://sharepoint/content/tenant"/>
+    <AppPermissionRequest Right="Manage" Scope="http://sharepoint/content/sitecollection"/>
+    <AppPermissionRequest Right="Manage" Scope="http://sharepoint/content/sitecollection/web"/>
+    <AppPermissionRequest Scope="http://sharepoint/search" Right="QueryAsUserIgnoreAppPrincipal" />
+  </AppPermissionRequests>
+</App>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- OfficeStore Version Permissions -->
+<App>
+  <AppPermissionRequests AllowAppOnlyPolicy="false">
+    <AppPermissionRequest Right="FullControl" Scope="http://sharepoint/content/tenant"/>
+    <AppPermissionRequest Scope="http://sharepoint/search" Right="QueryAsUserIgnoreAppPrincipal" />
+  </AppPermissionRequests>
+</App>
