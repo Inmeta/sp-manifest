@@ -1,3 +1,6 @@
+## Manipulate SharePoint manifest
+
+
 ```
 var manifest = require("./sp-manifest");
 
