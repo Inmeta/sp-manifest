@@ -12,7 +12,6 @@ Run npm command:
 #### .setPath(path:string)
 
 Sets the path of AppManifest.xml files. All files has to be in the same directory.
-
 The partial manifest files must have a name like: AppManifest.{build}.xml.
 
 Example:

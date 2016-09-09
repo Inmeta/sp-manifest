@@ -17,18 +17,21 @@ exports.getPath = function(){
 }
 
 exports.updatePermissions = function(build, cb) {
+    var deferred = Q.defer();
     buildType = build;
     
-    return Q
-    .fcall(readManifestFile.bind(null, build))   // Build manifest
+    Q.fcall(readManifestFile.bind(null, build))   // Build manifest
     .then(extractAppPermissionsFromManifest)     // gets AppPermissionRequests node 
     .then(saveManifestWithPermissions)
     .catch(function(error) {
-        cb(error);
+        if(cb) return cb(error)
+        deferred.reject(error);
     })
     .done(function(){
-        cb(null);
+        deferred.resolve(null);
     });
+
+    return deferred.promise;
 }
 
 function readManifestFile(build) {
