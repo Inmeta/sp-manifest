@@ -1,8 +1,10 @@
-const fs = require('fs'),
-    xml2js = require('xml2js'),
-    Q = require('q'),
-    builder = new xml2js.Builder(),
-    parser = new xml2js.Parser();
+const fs = require('fs');
+const xml2js = require('xml2js');
+const Q = require('q');
+const builder = new xml2js.Builder();
+const parser = new xml2js.Parser();
+// The semantic versioning format
+const V = { MAJOR: 0, MINOR: 1, BUILD: 2, REV: 3 };
 
 var MANIFEST_PATH = __dirname;
 var buildType = "";
@@ -19,6 +21,26 @@ exports.getPath = function(){
 exports.updatePermissions = function(build, cb) {
     var deferred = Q.defer();
     buildType = build;
+
+    Q.fcall(readManifestFile.bind(null, build))   // Build manifest
+    .then(extractAppPermissionsFromManifest)     // gets AppPermissionRequests node 
+    .then(saveManifestWithPermissions)
+    .then(function(manifestXMLData){
+        if(cb) return cb(manifestXMLData)
+        deferred.resolve(manifestXMLData);
+    })    
+    .catch(function(error) {
+        if(cb) return cb(error)
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+}
+
+exports.updateVersion = function(version) {
+    var deferred = Q.defer();
+    if( version.split(".").length < 4 )
+        return deferred.reject(new Error("Not valid SharePoint manifest version provided."));
     
     Q.fcall(readManifestFile.bind(null, build))   // Build manifest
     .then(extractAppPermissionsFromManifest)     // gets AppPermissionRequests node 
@@ -31,9 +53,10 @@ exports.updatePermissions = function(build, cb) {
         deferred.resolve(null);
     });
 
-    return deferred.promise;
+    return deferred.promise;    
 }
 
+exports.readManifestFile = readManifestFile;
 function readManifestFile(build) {
     var deferred = Q.defer();
     fs.readFile(getManifestPath(build), "utf-8", (err, data) => {
@@ -66,6 +89,28 @@ function extractAppPermissionsFromManifest() {
 
     return deferred.promise;
 }
+
+/**
+ * Extracts AppPermissionRequests from XML file
+ * @param xmlData XML file as string
+ * return{xmlObject, AppPermissionRequests};
+ */
+function extractAppVersionFromManifest() {
+    var deferred = Q.defer();
+
+    parser.parseString(manifestData["main"], function (err, xmlObject) {
+        if(err) return deferred.reject(new Error(err));
+        
+        if(xmlObject.App && xmlObject.App.AppPermissionRequests) {
+            deferred.resolve(xmlObject.App.AppPermissionRequests)
+        } else {
+            deferred.reject(new Error("App.AppPermissionRequests not found"));
+        }
+    });    
+
+    return deferred.promise;
+}
+
 function xmlString2JSON(_XMLstring) {
     var deferred = Q.defer();
 
@@ -90,7 +135,7 @@ function saveManifestWithPermissions(permissionsObject) {
 
         fs.writeFile(getManifestPath(), manifestXMLData, "utf8", function(err){
             if(err) return deferred.reject(new Error(err));
-            deferred.resolve();
+            deferred.resolve(manifestXMLData);
         })
     });
     return deferred.promise;        
