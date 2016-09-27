@@ -37,6 +37,7 @@ exports.updatePermissions = function(build, cb) {
     return deferred.promise;
 }
 
+/*
 exports.updateVersion = function(version) {
     var deferred = Q.defer();
     if( version.split(".").length < 4 )
@@ -55,6 +56,7 @@ exports.updateVersion = function(version) {
 
     return deferred.promise;    
 }
+*/
 
 exports.readManifestFile = readManifestFile;
 function readManifestFile(build) {
